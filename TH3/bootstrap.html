@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todo-List</title>
+    <style>
+        body{
+            background-color:#f8f9fa ;
+        }   
+        .todo-container{
+             max-width: 600px;
+            margin: 2rem auto;
+        }
+        .completed span {
+        text-decoration: line-through;
+        color: #6c757d;
+      }
+    </style>
+</head>
+<body>
+    <div class="todo-container">
+      <h1 class="text-center mb-4">Todo List</h1>
+      <div class="input-group mb-3">
+        <input
+          type="text"
+          id="taskInput"
+          class="form-control"
+          placeholder="Enter a new task..."
+        />
+        <button class="btn btn-success" id="addTaskBtn">Add Task</button>
+      </div>
+      <div class="btn-group mb-3" role="group">
+        <button class="btn btn-primary active" data-filter="all">All</button>
+        <button class="btn btn-primary" data-filter="pending">Pending</button>
+        <button class="btn btn-primary" data-filter="completed">
+          Completed
+        </button>
+      </div>
+      <ul class="list-group" id="taskList"></ul>
+    </div>
+
+    <script
+      src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+      integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"
+      integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy"
+      crossorigin="anonymous"
+    ></script>
+    <script>
+
+      let tasks = [];
+
+      const taskInput = document.getElementById("taskInput");
+      const addTaskBtn = document.getElementById("addTaskBtn");
+      const taskList = document.getElementById("taskList");
+      const filterButtons = document.querySelectorAll(".btn[data-filter]");
+
+      document.addEventListener("DOMContentLoaded", loadTasksFromLocalStorage);
+
+     
+      addTaskBtn.addEventListener("click", addTask);
+
+      filterButtons.forEach((button) => {
+        button.addEventListener("click", () => {
+          filterButtons.forEach((btn) => btn.classList.remove("active"));
+          button.classList.add("active");
+          filterTasks(button.dataset.filter);
+        });
+      });
+
+      function addTask() {
+        const taskText = taskInput.value.trim();
+        if (taskText === "") {
+          alert("Please enter a task!");
+          return;
+        }
+
+        const task = {
+          id: Date.now(),
+          text: taskText,
+          isDone: false,
+        };
+
+        tasks.push(task);
+        saveTasksToLocalStorage();
+        renderTasks();
+        taskInput.value = ""; 
+      }
+
+      
+      function renderTasks(filter = "all") {
+        taskList.innerHTML = ""; 
+
+        let filteredTasks = tasks;
+        if (filter === "pending") {
+          filteredTasks = tasks.filter((task) => !task.isDone);
+        } else if (filter === "completed") {
+          filteredTasks = tasks.filter((task) => task.isDone);
+        }
+
+        filteredTasks.forEach((task) => {
+          const li = document.createElement("li");
+          li.classList.add(
+            "list-group-item",
+            "d-flex",
+            "justify-content-between",
+            "align-items-center"
+          );
+          if (task.isDone) li.classList.add("completed");
+
+          const taskSpan = document.createElement("span");
+          taskSpan.textContent = task.text;
+          taskSpan.classList.add("flex-grow-1");
+          taskSpan.addEventListener("click", () =>
+            toggleTaskCompletion(task.id)
+          );
+
+          const deleteBtn = document.createElement("button");
+          deleteBtn.textContent = "Delete";
+          deleteBtn.classList.add("btn", "btn-danger", "btn-sm");
+          deleteBtn.addEventListener("click", () => deleteTask(task.id));
+
+          li.appendChild(taskSpan);
+          li.appendChild(deleteBtn);
+          taskList.appendChild(li);
+        });
+      }
+
+      // Function to toggle task completion
+      function toggleTaskCompletion(taskId) {
+        tasks = tasks.map((task) =>
+          task.id === taskId ? { ...task, isDone: !task.isDone } : task
+        );
+        saveTasksToLocalStorage();
+        renderTasks(
+          document.querySelector(".btn.active[data-filter]").dataset.filter
+        );
+      }
+
+      
+      function deleteTask(taskId) {
+        tasks = tasks.filter((task) => task.id !== taskId);
+        saveTasksToLocalStorage();
+        renderTasks(
+          document.querySelector(".btn.active[data-filter]").dataset.filter
+        );
+      }
+
+      // Function to save tasks to localStorage
+      function saveTasksToLocalStorage() {
+        localStorage.setItem("tasks", JSON.stringify(tasks));
+      }
+
+      // Function to load tasks from localStorage
+      function loadTasksFromLocalStorage() {
+        const storedTasks = localStorage.getItem("tasks");
+        if (storedTasks) {
+          tasks = JSON.parse(storedTasks);
+          renderTasks();
+        }
+      }
+
+      // Function to filter tasks
+      function filterTasks(filter) {
+        renderTasks(filter);
+      }
+    </script>
+</body>
+</html>
