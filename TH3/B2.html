@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Form Đăng Ký với Bootstrap</title>
+    <!-- Nhúng Bootstrap CSS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      h2{
+        color:black
+      }
+      .error {
+        color: darkred;
+        font-size: 0.9em;
+        margin-top: 5px;
+        display: block;
+      }
+      .success {
+        font-size: 1.1em;
+      }
+      .hidden {
+        display: none;
+      }
+      .form-container {
+        background-color:whitesmoke;
+        max-width: 500px;
+        margin: 50px auto;
+        padding: 20px;
+        /* border: 1px solid #dee2e6; */
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
+      #i:hover{
+        background-color: black;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="form-container">
+        <h2 class="text-center mb-4">Form Đăng Ký</h2>
+        <form id="demoForm">
+          <div class="mb-3">
+            <label for="username" class="form-label">Họ tên:</label>
+            <input
+              type="text"
+              id="username"
+              name="username"
+              class="form-control"
+            />
+          </div>
+          <div class="mb-3">
+            <label for="email" class="form-label">Email:</label>
+            <input type="email" id="email" name="email" class="form-control" />
+          </div>
+          <div class="mb-3">
+            <label for="password" class="form-label">Mật khẩu:</label>
+            <input
+              type="password"
+              id="password"
+              name="password"
+              class="form-control"
+            />
+          </div>
+          <div class="mb-3">
+            <label for="re-password" class="form-label"
+              >Nhập lại mật khẩu:</label
+            >
+            <input
+              type="password"
+              id="re-password"
+              name="re-password"
+              class="form-control"
+            />
+          </div>
+          <button id="i" type="submit" class="btn btn-secondary w-100">Đăng ký</button>
+        </form>
+        <div
+          id="successMessage"
+          class="alert alert-success hidden mt-3"
+          role="alert"
+        ></div>
+        <button id="deleteBtn" class="btn btn-danger mt-3 hidden">Xóa</button>
+        <div id="showText" class="alert alert-info hidden mt-3" role="alert">
+          Đã xóa thành công!
+        </div>
+      </div>
+    </div>
+
+    <!-- Nhúng jQuery, jQuery Validation, và Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+      $(document).ready(function () {
+        console.log("jQuery is ready!");
+
+        // Cấu hình jQuery Validation
+        $("#demoForm").validate({
+          rules: {
+            username: {
+              required: true,
+              maxlength: 32,
+            },
+            email: {
+              required: true,
+              email: true,
+              maxlength: 30,
+            },
+            password: {
+              required: true,
+              minlength: 8,
+            },
+            "re-password": {
+              required: true,
+              equalTo: "#password",
+              minlength: 8,
+            },
+          },
+          messages: {
+            username: {
+              required: "Vui lòng nhập họ tên hoặc không được để trống!",
+              maxlength: "Họ tên tối đa 32 ký tự.",
+            },
+            email: {
+              required: "Bắt buộc nhập email",
+              email: "Vui lòng nhập email đúng định dạng.",
+              maxlength: "Hãy nhập tối đa 30 ký tự.",
+            },
+            password: {
+              required: "Bắt buộc nhập mật khẩu",
+              minlength: "Hãy nhập ít nhất 8 ký tự.",
+            },
+            "re-password": {
+              required: "Bắt buộc nhập lại mật khẩu",
+              equalTo: "Mật khẩu nhập lại phải giống mật khẩu.",
+              minlength: "Hãy nhập ít nhất 8 ký tự.",
+            },
+          },
+          errorPlacement: function (error, element) {
+            error.insertAfter(element); // Chèn thông báo lỗi ngay sau input
+          },
+          submitHandler: function (form) {
+            // Gửi AJAX khi form hợp lệ
+            $.ajax({
+              url: "https://jsonplaceholder.typicode.com/users",
+              method: "POST",
+              data: {
+                username: $("#username").val(),
+                email: $("#email").val(),
+                password: $("#password").val(),
+              },
+              success: function (response) {
+                $("#demoForm").slideUp(500, function () {
+                  $("#successMessage")
+                    .text("Đăng ký thành công! ID: " + response.id)
+                    .removeClass("hidden")
+                    .fadeIn(500);
+                  $("#deleteBtn").removeClass("hidden");
+                });
+              },
+              error: function () {
+                $("#successMessage")
+                  .text("Server bận, vui lòng thử lại sau.")
+                  .removeClass("hidden")
+                  .addClass("alert-danger")
+                  .removeClass("alert-success")
+                  .fadeIn(500);
+              },
+            });
+          },
+        });
+
+        $("#deleteBtn").on("click", function () {
+          var result = confirm("Bạn có chắc chắn muốn xóa hay không?");
+          if (result) {
+            $("#showText").removeClass("hidden").fadeIn(500);
+            $("#successMessage").slideUp(500);
+            $("#deleteBtn").addClass("hidden");
+          }
+        });
+      });
+    </script>
+  </body>
+</html>
