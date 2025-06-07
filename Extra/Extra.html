@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản lý Học sinh</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Form thêm/sửa học sinh -->
+        <form id="studentForm">
+            <div class="form-group">
+                <label for="fullName">Họ tên:</label>
+                <input type="text" id="fullName" required>
+                <div id="errorFullName" class="error-message"></div> <!-- Hiển thị lỗi Họ tên -->
+            </div>
+            
+            <div class="form-group">
+                <label for="className">Lớp:</label>
+                <input type="text" id="className" required>
+                <div id="errorClassName" class="error-message"></div> <!-- Hiển thị lỗi Lớp -->
+            </div>
+            
+            <div class="form-actions">
+                <button type="button" id="btnAdd">Thêm Học sinh</button> <!-- Nút thêm, hiển thị mặc định -->
+                <button type="button" id="btnUpdate" style="display: none;">Cập nhật</button> <!-- Nút sửa, ẩn ban đầu -->
+                <button type="button" id="btnCancel" style="display: none;">Hủy</button> <!-- Nút hủy, ẩn ban đầu -->
+            </div>
+            
+            <div id="notification" class="notification"></div> <!-- Khu vực thông báo -->
+        </form>
+        
+        <!-- Bảng danh sách học sinh -->
+        <table id="studentTable">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Họ tên</th>
+                    <th>Lớp</th>
+                    <th>Hành động</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Dữ liệu mẫu -->
+                <tr>
+                    <td>1</td>
+                    <td>Nguyễn Văn A</td>
+                    <td>10A1</td>
+                    <td>
+                        <button class="btn-edit">Sửa</button>
+                        <button class="btn-delete">Xóa</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td>Trần Thị B</td>
+                    <td>10A2</td>
+                    <td>
+                        <button class="btn-edit">Sửa</button>
+                        <button class="btn-delete">Xóa</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,102 @@
+/* Căn giữa và tạo khoảng cách cho toàn bộ nội dung */
+.container {
+    width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* Tạo khoảng cách giữa các ô nhập liệu */
+.form-group {
+    margin-bottom: 10px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+/* Style cho thông báo lỗi */
+.error-message {
+    color: red;
+    font-size: 0.9rem;
+    display: none; /* Ẩn ban đầu */
+}
+
+/* Style cho các nút */
+button {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-right: 5px;
+}
+
+#btnAdd {
+    background-color: #4CAF50;
+    color: white;
+}
+
+#btnUpdate {
+    background-color: #2196F3;
+    color: white;
+}
+
+#btnCancel {
+    background-color: #f44336;
+    color: white;
+}
+
+.btn-edit {
+    background-color: #FFC107;
+    color: black;
+}
+
+.btn-delete {
+    background-color: #f44336;
+    color: white;
+}
+
+/* Style cho thông báo */
+.notification {
+    padding: 10px;
+    margin-top: 10px;
+    border-radius: 4px;
+    display: none; /* Ẩn ban đầu */
+}
+
+.notification.success {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+/* Style cho bảng */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+table, th, td {
+    border: 1px solid #ddd;
+}
+
+th, td {
+    padding: 12px;
+    text-align: left;
+}
+
+th {
+    background-color: #f2f2f2;
+}
+
+tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
